@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="final">
+    <file>resources.ui</file>
+  </qresource>
+</RCC>

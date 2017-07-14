@@ -1,9 +1,11 @@
 -drag'n'drop dinge
--name geben für elemente
+-name geben fï¿½r elemente
 -resource file erstellen mit resourcen
 -alles im selben order
--im ordner cmd in fenster (cd oder shift+rechtsklick) 
+-im ordner cmd in fenster (cd oder shift+rechtsklick)
 	-pyrcc5 -o resource_rc.py resource.qrc [bzw pyrcc4]
--gui für pyqt4, gui_base für pyqt5 für einbindung
+-gui fï¿½r pyqt4, gui_base fï¿½r pyqt5 fï¿½r einbindung
 -einbinden (bsp file). in pyqt5 QtWidget statt QtCore bzw QtGui buttons etc
 -einbinden menu bar
+
+yo wassup man

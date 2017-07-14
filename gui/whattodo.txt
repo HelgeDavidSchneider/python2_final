@@ -8,4 +8,4 @@
 -einbinden (bsp file). in pyqt5 QtWidget statt QtCore bzw QtGui buttons etc
 -einbinden menu bar
 
-Hi its me here!!!
+yo wassup man

@@ -1,21 +1,21 @@
+# -*- coding: utf-8 -*-
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget
 
-class MyForm(QtGui.QMainWindow):
+from PyQt5 import uic, QtWidgets
+ 
+qtCreatorFile = "interface.ui" # Enter file here.
+ 
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
-        self.ui = Ui_Form()
-        self.ui.setupUi(self)
 
-        self.ui.pushButton.clicked.connect(self.helloworld)
-
-    def helloworld(self):
-        self.ui.textEdit.setText(“Hello world”)
-        print (‘Hello world again’)
-
-if __name__ == “__main__”:
-    app = QtGui.QApplication(sys.argv)
-    myapp = MyForm()
-    myapp.show()
+class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        Ui_MainWindow.__init__(self)
+        self.setupUi(self)
+ 
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = MyApp()
+    window.show()
     sys.exit(app.exec_())

@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="HTML">
+    <file>docu.html</file>
+  </qresource>
+</RCC>

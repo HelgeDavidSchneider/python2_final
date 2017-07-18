@@ -1,6 +1,7 @@
 #imports
 import sys
 from PyQt5 import uic, QtWidgets
+from ct_function import printer
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
@@ -35,6 +36,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_ctm.triggered.connect(self.ctm_app)
         self.menu_route.triggered.connect(self.route_app)
         self.menu_plotting.triggered.connect(self.plotting_app)
+        """
 
     def contact_app(self):
         text = u"""
@@ -58,7 +60,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             sys.exit()
         else:
             pass
-    """
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

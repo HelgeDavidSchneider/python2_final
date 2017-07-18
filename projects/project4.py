@@ -1,9 +1,6 @@
 """
 3925188 Helge Schneider
 Project was created with Python 3.5
-
-Questions for next next lesson:
-How to handle zero devision Error with numpy?
 """
 
 import matplotlib.pyplot as plt

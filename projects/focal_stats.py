@@ -76,7 +76,7 @@ def img_filter(img_path, filtertype, functiontype="mean", squarelength=None, sha
     plt.figure()
     plt.subplot(121)
     plt.imshow(img_org)
-    plt.title('Orgignal')
+    plt.title('Original')
     plt.subplot(122)
     plt.imshow(img_fil)
     print(functiontype)

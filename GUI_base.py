@@ -24,8 +24,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
 
-        """
 
+        """
         # menu buttons
             # file submenu
         self.menu_close.triggered.connect(self.close_app)
@@ -41,6 +41,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_ctm.triggered.connect(self.ctm_app)
         self.menu_route.triggered.connect(self.route_app)
         self.menu_plotting.triggered.connect(self.plotting_app)
+        """
 
     def contact_app(self):
         text = u"""
@@ -49,13 +50,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         QtWidgets.QMessageBox.about(self, 'Contact', text)
 
-
-    def sum_(self):
-        text = (self.var1.value())
-        result = printer(str(text))
-        print(text)
-        self.totalbox.setText(result)
-        """
 
     def close_app(self):
         choise = QtWidgets.QMessageBox.question(self,

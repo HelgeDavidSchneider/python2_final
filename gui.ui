@@ -262,7 +262,7 @@
         <x>10</x>
         <y>10</y>
         <width>161</width>
-        <height>461</height>
+        <height>171</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -350,30 +350,6 @@
          </item>
         </layout>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_10"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_13"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_16"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_15"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_14"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_10"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_12"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_11"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -385,7 +361,11 @@
         <height>461</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_8"/>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QGraphicsView" name="plot_view"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -41,7 +41,7 @@
       </property>
       <property name="url">
        <url>
-        <string>qrc:/HTML/docu.html</string>
+        <string>file:///E:/DropBox/Dropbox/STUDIGEDÖNS/fächer/python 2/projekte/final_git/python2_final/docu.html</string>
        </url>
       </property>
      </widget>
@@ -262,7 +262,7 @@
         <x>10</x>
         <y>10</y>
         <width>161</width>
-        <height>171</height>
+        <height>174</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">

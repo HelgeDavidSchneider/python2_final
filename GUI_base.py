@@ -25,6 +25,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_file_path = None
 
 
+
         """
         # menu buttons
             # file submenu
@@ -103,7 +104,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         options |= QFileDialog.DontUseNativeDialog
         self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
                                                   "All files(*)", options=options)
-
 
 
 if __name__ == "__main__":

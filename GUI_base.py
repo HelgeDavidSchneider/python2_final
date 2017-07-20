@@ -11,6 +11,7 @@ from projects.plot import plotter
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
 
+
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):

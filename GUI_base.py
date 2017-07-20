@@ -43,6 +43,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_route.triggered.connect(self.route_tab)
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
+    #tab swtich functions
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 

@@ -6,6 +6,7 @@ import webbrowser as wb
 import subprocess as sp
 
 from projects.focal_stats import *
+from projects.plot import plotter
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
@@ -19,13 +20,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        # buttons within tab widgets
+        # buttons in info tab
         self.info_close.clicked.connect(self.close_app)
 
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
+
+        #buttons in plotting tab
+        self.plot_plot.clicked.connect(self.plot_app)
 
         # menu buttons
             # file submenu
@@ -42,6 +46,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_ctm.triggered.connect(self.ctm_tab)
         self.menu_route.triggered.connect(self.route_tab)
         self.menu_plotting.triggered.connect(self.plotting_tab)
+
+    def plot_app(self):
+        a1 = self.plot_a1.value()
+        a2 = self.plot_a2.value()
+        n1 = self.plot_n1.value()
+        n2 = self.plot_n2.value()
+
+        plotter(a1,n1)
+        #plotter(a2,n2)
+
 
     #tab swtich functions
     def info_tab(self):
@@ -160,5 +174,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
+    window.setWindowTitle("Incredible App")
     window.show()
     sys.exit(app.exec_())

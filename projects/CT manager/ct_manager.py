@@ -1,10 +1,10 @@
+"""
+
+"""
+
 import pandas as pd
 import numpy as np
 import os
-
-"""
-
-"""
 
 # DEFINE data path
 folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT manager/Data_Part_1"
@@ -29,6 +29,7 @@ def imk_folder(folderpath):
             df_final = pd.concat([df_final, dff])
             df2_final = pd.concat([df2_final, dff2])
 
+    # PROCESS data TODO replace True/False with 1 and 0
     df_final['Knot'] = np.arange(1, df_final.shape[0] + 1)
     df2_final['Knot'] = np.arange(1, df2_final.shape[0] + 1)
 
@@ -48,7 +49,7 @@ def imk_folder(folderpath):
 def imk_file(filepath):
 
     # IMPORT
-    df = pd.read_table(filepath)
+    df = pd.read_csv(filepath)
 
     # GET name
     tree_id = int(os.path.basename(filepath).split('-')[0])

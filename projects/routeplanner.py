@@ -1,17 +1,22 @@
 '''
-Skript for a route planner, that ...
+Skript to plot a route planner of random generated points.
+
+The route planner calculates the path from one point to another,
+ with the minimum weight, in this case the smallest distance.
+
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial import Delaunay
 from scipy.spatial.distance import pdist, squareform
-from scipy.sparse.csgraph import \
-	dijkstra  # , floyd_warshall, bellman_ford, johnson
+from scipy.sparse.csgraph import dijkstra
+	#floyd_warshall, bellman_ford, johnson
 
-
-def nodes_plot():
-	np.random.seed(42)
+def nodes_plot(no = 42):
+	if isinstance(no, int) == False:
+		raise ValueError('Wrong Input. Number of seed has to be int.')
+	np.random.seed(no)
 	nodes = np.random.gamma(10, 2, size=(20, 2))
 
 	fig, ax = plt.subplots(1, 1, figsize=(8, 8))
@@ -23,14 +28,16 @@ def nodes_plot():
 	return plt.show()
 
 
-def routeplanner(start, finish, distance):
+def routeplanner(start, finish, distance, no=42):
 	if start not in range(20) or finish not in range(20) \
 			or distance not in ['eucledian', 'manhatten']:
 		raise ValueError('Wrong Input. '
 						 '\nstart and finish have to be int between 0 and 19. '
 						 '\ndistance can only be eucledian or manhatten.')
+	elif isinstance(no, int) == False:
+		raise ValueError('Wrong Input. Number of seed has to be int.')
 
-	np.random.seed(42)
+	np.random.seed(no)
 	nodes = np.random.gamma(10, 2, size=(20, 2))
 	delaunay = Delaunay(nodes)
 	segments = list()
@@ -102,3 +109,4 @@ def routeplanner(start, finish, distance):
 	plt.suptitle(title[0] + title[1])
 
 	return plt.show()
+

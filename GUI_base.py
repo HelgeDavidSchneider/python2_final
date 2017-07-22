@@ -1,4 +1,6 @@
 #imports
+import sys
+
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from html.parser import HTMLParser

@@ -8,6 +8,7 @@ import webbrowser as wb
 import subprocess as sp
 
 from projects.focal_stats import *
+from projects.routeplanner import *
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
@@ -28,6 +29,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
+
+        #buttons in route planner
+        self.pb_route.clicked.connect(self.route_plot)
 
         # menu buttons
             # file submenu
@@ -158,6 +162,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
                                                   "All files(*)", options=options)
 
+    def route_plot(self):
+        pass
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

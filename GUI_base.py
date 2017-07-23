@@ -1,16 +1,18 @@
 #imports
+import sys
+
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from html.parser import HTMLParser
 import webbrowser as wb
 import subprocess as sp
 
+#imports for subproject files
 from projects.focal_stats import *
 from projects.plot import plotter
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
-
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -49,16 +51,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
     def plot_app(self):
+        '''
+        calls plotter in plot.py
+        '''
         a1 = self.plot_a1.value()
         a2 = self.plot_a2.value()
         n1 = self.plot_n1.value()
         n2 = self.plot_n2.value()
 
         plotter(a1,n1)
-        #plotter(a2,n2)
+        plotter(a2,n2)
 
 
-    #tab swtich functions
+    #tab switch functions
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 
@@ -75,12 +80,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tabWidget.setCurrentIndex(4)
 
     def ipython_app(self):
+        '''
+        opens a new ipython/jupyter window as new tab
+        in standard browser
+        '''
         sp.call("ipython notebook")
 
     def browser_app(self):
+        '''
+        opens a new Uni Freiburg tab in standard browser
+        '''
         wb.open_new('https://www.unr.uni-freiburg.de/')
 
     def contact_app(self):
+        '''
+        opens a message box with contact details
+        '''
         html = HTMLParser()
         text = html.unescape('If you have any questions or problems, please contact us:<br>'
                              '<ul>'
@@ -93,12 +108,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, 'Contact', text)
 
     def docu_app(self):
+        '''
+        opens a new message box with information
+        '''
         text = u"""
                 See Info Tab for documentation
                 """
         QtWidgets.QMessageBox.about(self, 'Documentation', text)
 
     def close_app(self):
+        '''
+        close application for the programm. called by close button and file->close
+        '''
         choise = QtWidgets.QMessageBox.question(self,
                                                 "Close",
                                                 'You are closing the application. Are you sure?',
@@ -109,6 +130,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
 
     def about_app(self):
+        '''
+        opens message box about the program
+        '''
         html = HTMLParser()
         text = html.unescape('This App was programmed by:<br>'
                              '<ul>'

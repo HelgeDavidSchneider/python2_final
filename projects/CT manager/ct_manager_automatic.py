@@ -69,6 +69,7 @@ def ako_folder(folderpath):
     writer = pd.ExcelWriter(folderpath + '/output/CT_KnotData.xlsx')
     df_final.to_excel(writer, 'Multi_CT')
     df2_final.to_excel(writer, 'One_CT')
+    knot_table.to_excel(writer, 'Knot Table')
     writer.save()
 
     return df_final, df2_final, knot_table
@@ -279,6 +280,5 @@ def ako_one_combine(df_out, filepath, tree_id, log_id):
 
 # Test
 folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT manager/Data_Part_2"
-filepath = folderpath + '/knotsParametric@Dgl_623_1_2015_05_20.csv'
 df1, df2, knot_table = ako_folder(folderpath)
 

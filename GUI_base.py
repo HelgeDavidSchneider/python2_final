@@ -1,4 +1,4 @@
-#imports
+# imports
 import sys
 
 from PyQt5 import uic, QtWidgets
@@ -7,14 +7,15 @@ from html.parser import HTMLParser
 import webbrowser as wb
 import subprocess as sp
 
-#imports for subproject files
+# imports for subproject files
 from projects.focal_stats import *
 from projects.plot import plotter
 
-#insert gui.ui file
+# insert gui.ui file
 qtCreatorFile = "gui.ui"
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -31,19 +32,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
 
-        #buttons in plotting tab
+        # buttons in plotting tab
         self.plot_plot.clicked.connect(self.plot_app)
 
         # menu buttons
-            # file submenu
+        # file submenu
         self.menu_close.triggered.connect(self.close_app)
         self.menu_ipython.triggered.connect(self.ipython_app)
         self.menu_browser.triggered.connect(self.browser_app)
-            # help submenu
+        # help submenu
         self.menu_docu.triggered.connect(self.docu_app)
         self.menu_contact.triggered.connect(self.contact_app)
         self.menu_about.triggered.connect(self.about_app)
-            # toolbar submenu
+        # toolbar submenu
         self.menu_info.triggered.connect(self.info_tab)
         self.menu_fs.triggered.connect(self.fs_tab)
         self.menu_ctm.triggered.connect(self.ctm_tab)
@@ -59,11 +60,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         n1 = self.plot_n1.value()
         n2 = self.plot_n2.value()
 
-        plotter(a1,n1)
-        plotter(a2,n2)
+        plotter(a1, n1)
+        plotter(a2, n2)
 
-
-    #tab switch functions
+    # tab switch functions
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 
@@ -149,7 +149,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                              '<li>Joao Paulo Pereira <a href="mailto:"joao.pereira@felis.uni-freiburg.de">joao.pereira@felis.uni-freiburg.de</a></li>'
                              '</ul>')
 
-
         QtWidgets.QMessageBox.about(self, 'About', text)
 
     def fs_run_filter(self):
@@ -159,7 +158,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         with set parameters.
         :returns pop-up with original and filtered image
         '''
-        #var def
+        # var def
         filter_type = self.fs_filter_type.currentText()
         function_type = self.fs_function_type.currentText()
         squarelength = None
@@ -167,7 +166,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         radius = None
         angle = None
 
-        #swtich through filter types
+        # swtich through filter types
         if filter_type.lower() == 'square':
             squarelength = self.fs_squarelength.value()
         elif filter_type.lower() == 'rectangular':
@@ -177,12 +176,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         elif filter_type.lower() == 'wedge':
             angle = (self.fs_radius.value(), self.fs_shape_1.value(), self.fs_shape_2.value())
 
-        #format
-        function_type=function_type.replace("Standard Deviation", "std").replace("Maximum", "max").replace("Minimum", "min").lower()
+        # format
+        function_type = function_type.replace("Standard Deviation", "std").replace("Maximum", "max").replace("Minimum",
+                                                                                                             "min").lower()
         img_path = (str(self.fs_file_path))
 
-        #filter function call
-        filter_main(img_path = img_path, filtertype=filter_type.lower(), functiontype=function_type, squarelength=squarelength, shape=shape, radius=radius,
+        # filter function call
+        filter_main(img_path=img_path, filtertype=filter_type.lower(), functiontype=function_type,
+                    squarelength=squarelength, shape=shape, radius=radius,
                     angles=angle)
 
     def file_browser(self):
@@ -193,7 +194,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                                  "All files(*)", options=options)
+                                                           "All files(*)", options=options)
 
 
 if __name__ == "__main__":

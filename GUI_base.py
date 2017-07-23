@@ -34,6 +34,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #buttons in plotting tab
         self.plot_plot.clicked.connect(self.plot_app)
 
+        #buttons in ct manager tab
+        self.ctm_browse.clicked.connect(self.directory_browser)
+        self.ctm_dir = None
+
         # menu buttons
             # file submenu
         self.menu_close.triggered.connect(self.close_app)
@@ -194,7 +198,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         options |= QFileDialog.DontUseNativeDialog
         self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
                                                   "All files(*)", options=options)
-
+    def directory_browser(self):
+        '''
+        :returns: chosen folder as path string
+        '''
+        self.ctm_dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

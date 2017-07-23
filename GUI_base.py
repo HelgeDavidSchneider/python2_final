@@ -106,7 +106,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                              '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
                              '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
                              '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '<li>Rafael <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
+                             '<li>Rafael. <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
                              '</ul>')
 
         QtWidgets.QMessageBox.about(self, 'Contact', text)

@@ -33,7 +33,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_file_path = None
 
         #buttons in route planner
-        self.pb_route.clicked.connect(self.route_plot)
+        #self.pb_route.clicked.connect(self.route_plot)
 
         #buttons in plotting tab
         #self.plot_plot.clicked.connect(self.plot_app)

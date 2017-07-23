@@ -1,3 +1,7 @@
+'''
+focal statistics functions from earlier project
+'''
+
 import numpy as np
 import scipy
 # from scipy.misc import imread
@@ -73,13 +77,12 @@ def img_filter(img_path, filtertype, functiontype="mean", squarelength=None, sha
     img_fil = img_fil.astype(np.uint8)
 
     # plot the image
-    plt.figure()
+    plt.figure(figsize=(20,10))
     plt.subplot(121)
     plt.imshow(img_org)
     plt.title('Original')
     plt.subplot(122)
     plt.imshow(img_fil)
-    print(functiontype)
     plt.title('Image with %s filter' % (functiontype))
     plt.show()
 

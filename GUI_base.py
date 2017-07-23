@@ -7,7 +7,9 @@ from html.parser import HTMLParser
 import webbrowser as wb
 import subprocess as sp
 
+#imports for subproject files
 from projects.focal_stats import *
+from projects.plot import plotter
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
@@ -21,13 +23,20 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        # buttons within tab widgets
+        # buttons in info tab
         self.info_close.clicked.connect(self.close_app)
 
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
+
+        #buttons in plotting tab
+        self.plot_plot.clicked.connect(self.plot_app)
+
+        #buttons in ct manager tab
+        self.ctm_browse.clicked.connect(self.directory_browser)
+        self.ctm_dir = None
 
         # menu buttons
             # file submenu
@@ -45,7 +54,20 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_route.triggered.connect(self.route_tab)
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
-    #tab swtich functions
+    def plot_app(self):
+        '''
+        calls plotter in plot.py
+        '''
+        a1 = self.plot_a1.value()
+        a2 = self.plot_a2.value()
+        n1 = self.plot_n1.value()
+        n2 = self.plot_n2.value()
+
+        plotter(a1,n1)
+        plotter(a2,n2)
+
+
+    #tab switch functions
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 
@@ -62,30 +84,46 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tabWidget.setCurrentIndex(4)
 
     def ipython_app(self):
+        '''
+        opens a new ipython/jupyter window as new tab
+        in standard browser
+        '''
         sp.call("ipython notebook")
 
     def browser_app(self):
+        '''
+        opens a new Uni Freiburg tab in standard browser
+        '''
         wb.open_new('https://www.unr.uni-freiburg.de/')
 
     def contact_app(self):
+        '''
+        opens a message box with contact details
+        '''
         html = HTMLParser()
         text = html.unescape('If you have any questions or problems, please contact us:<br>'
                              '<ul>'
                              '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
                              '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
                              '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '<li>Rafael <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
+                             '<li>Rafael. <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
                              '</ul>')
 
         QtWidgets.QMessageBox.about(self, 'Contact', text)
 
     def docu_app(self):
+        '''
+        opens a new message box with information
+        '''
         text = u"""
                 See Info Tab for documentation
                 """
         QtWidgets.QMessageBox.about(self, 'Documentation', text)
 
     def close_app(self):
+        '''
+        close application for the programm. called by close button and file->close
+        '''
         choise = QtWidgets.QMessageBox.question(self,
                                                 "Close",
                                                 'You are closing the application. Are you sure?',
@@ -96,6 +134,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
 
     def about_app(self):
+        '''
+        opens message box about the program
+        '''
         html = HTMLParser()
         text = html.unescape('This App was programmed by:<br>'
                              '<ul>'
@@ -157,10 +198,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         options |= QFileDialog.DontUseNativeDialog
         self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
                                                   "All files(*)", options=options)
-
+    def directory_browser(self):
+        '''
+        :returns: chosen folder as path string
+        '''
+        self.ctm_dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
+    window.setWindowTitle("Incredible App")
     window.show()
     sys.exit(app.exec_())

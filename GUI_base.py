@@ -36,7 +36,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pb_route.clicked.connect(self.route_plot)
 
         #buttons in plotting tab
-        self.plot_plot.clicked.connect(self.plot_app)
+        #self.plot_plot.clicked.connect(self.plot_app)
 
         #buttons in ct manager tab
         self.ctm_browse.clicked.connect(self.directory_browser)

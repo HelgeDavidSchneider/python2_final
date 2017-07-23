@@ -1,3 +1,9 @@
+"""
+TODO
+
+Check the reliability of all columns in the output frames.
+"""
+
 import pandas as pd
 import numpy as np
 import os
@@ -18,7 +24,6 @@ def imk_folder(folderpath):
     # ITERATE over all files
     for filename in os.listdir(folderpath):
         if filename not in ['output']:
-            print(filename)
             filepath = folderpath + '/' + filename
             dff, dff2, knot = imk_file(filepath, knot)
             df_final = pd.concat([df_final, dff])

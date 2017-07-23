@@ -1,7 +1,16 @@
+"""
+TODO
+
+every knot is used in every file, this is somehow unexpected.
+Search why there is no knot excluded and correct the function.
+Please check the reliability of all other columns in the output frames as well
+"""
+
 import pandas as pd
 import numpy as np
 import os
 from math import tan, log, pi
+
 
 # Final
 def ako_folder(folderpath):
@@ -14,6 +23,8 @@ def ako_folder(folderpath):
     # CREATE output data frames
     df_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
     df2_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
+    knot_table = pd.DataFrame(columns=['file', 'Knots in total', 'Excluded knots', 'Remaining knots', 'Percentage of usable knots'])
+    df_index = 0
 
     # ITERATE over all knot files in the folderpath
     for filename in os.listdir(folderpath):
@@ -21,13 +32,16 @@ def ako_folder(folderpath):
 
             filepath = folderpath + '/' + filename
             # Database 1
-            dff, knot_table = ako_multi(filepath)
+            dff, knot_tablef = ako_multi(filepath, df_index)
+            df_index += 1
+
             # Database 2
             dff2 = ako_one(filepath)
 
             # ADD frames to the final output
             df_final = pd.concat([df_final, dff])
             df2_final = pd.concat([df2_final, dff2])
+            knot_table = pd.concat([knot_table, knot_tablef])
 
     # PROCESS output frames
     df2_final['Knot'] = np.arange(1, df2_final.shape[0] + 1)
@@ -57,11 +71,11 @@ def ako_folder(folderpath):
     df2_final.to_excel(writer, 'One_CT')
     writer.save()
 
-    return df_final, df2_final
+    return df_final, df2_final, knot_table
 
 
 # Multi_CT
-def ako_multi(filepath):
+def ako_multi(filepath, df_index):
     """
     ako_multi creates returns the multi database for a single knot file
     first it creates a table with information about the used knots
@@ -83,10 +97,12 @@ def ako_multi(filepath):
     percentage = remaining / total * 100
 
     # CREATE table
-    knot_table = pd.Series({'Knots in total': total,
-                            'Excluded knots': excluded,
-                            'Remaining knots': remaining,
-                            'Percentage of usable knots': percentage})
+    knot_table = pd.DataFrame({'file': os.path.basename(filepath),
+                               'Knots in total': total,
+                               'Excluded knots': excluded,
+                               'Remaining knots': remaining,
+                               'Percentage of usable knots': percentage},
+                              index=[df_index])
 
     # CREATE output
     df_out = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
@@ -263,5 +279,6 @@ def ako_one_combine(df_out, filepath, tree_id, log_id):
 
 # Test
 folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT manager/Data_Part_2"
-df1, df2 = ako_folder(folderpath)
+filepath = folderpath + '/knotsParametric@Dgl_623_1_2015_05_20.csv'
+df1, df2, knot_table = ako_folder(folderpath)
 

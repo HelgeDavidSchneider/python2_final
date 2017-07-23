@@ -9,6 +9,7 @@ import subprocess as sp
 
 #imports for subproject files
 from projects.focal_stats import *
+from projects.routeplanner import *
 from projects.plot import plotter
 
 #insert gui.ui file
@@ -23,13 +24,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        # buttons in info tab
+        # buttons within tab widgets
         self.info_close.clicked.connect(self.close_app)
 
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
+
+        #buttons in route planner
+        self.pb_route.clicked.connect(self.route_plot)
 
         #buttons in plotting tab
         self.plot_plot.clicked.connect(self.plot_app)
@@ -203,6 +207,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         :returns: chosen folder as path string
         '''
         self.ctm_dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+
+    def route_plot(self):
+        pass
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

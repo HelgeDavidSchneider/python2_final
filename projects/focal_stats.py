@@ -1,3 +1,7 @@
+'''
+focal statistics functions from earlier project
+'''
+
 import numpy as np
 import scipy
 # from scipy.misc import imread

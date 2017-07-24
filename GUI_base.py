@@ -360,33 +360,33 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         title = 'Path %s to %s: ' % (start, finish), ' - '.join(
             ['%d' % _ for _ in reversed(path)])
 
-        figr = Figure((4.0, 4.0), dpi=100)
-        canvasr = FigureCanvas(figr)
-        canvasr.setParent(self.qfigWidget)
+        fig = Figure((4.0, 4.0), dpi=100)
+        canvas = FigureCanvas(fig)
+        canvas.setParent(self.qfigWidget)
 
         # plot
-        axesr = figr.add_subplot(111)
+        axes = fig.add_subplot(111)
 
         # plot the vertices
-        axesr.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o',
+        axes.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o',
                   color='gray')
 
         for i, node in enumerate(nodes):
-            axesr.text(node[0], node[1] * 1.01, '%d' % i, color='gray')
+            axes.text(node[0], node[1] * 1.01, '%d' % i, color='gray')
 
         # plot the edges
         for edge in edges:
-            axesr.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
+            axes.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
                       color='k')
 
         # plot the path
         for i in range(1, len(path)):
-            axesr.plot(nodes[(path[i - 1], path[i]),][:, 0],
+            axes.plot(nodes[(path[i - 1], path[i]),][:, 0],
                       nodes[(path[i - 1], path[i]),][:, 1], '-g', lw=2)
 
         # plot start and end point
-        axesr.plot(nodes[path[0]][0], nodes[path[0]][1], 'or', markersize=9)
-        axesr.plot(nodes[path[-1]][0], nodes[path[-1]][1], 'og', markersize=9)
+        axes.plot(nodes[path[0]][0], nodes[path[0]][1], 'or', markersize=9)
+        axes.plot(nodes[path[-1]][0], nodes[path[-1]][1], 'og', markersize=9)
 
         #plt.suptitle(title[0] + title[1])
 

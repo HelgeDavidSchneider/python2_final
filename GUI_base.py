@@ -6,6 +6,9 @@ from PyQt5.QtWidgets import QFileDialog
 from html.parser import HTMLParser
 import webbrowser as wb
 import subprocess as sp
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from numpy import arange, sin, pi
 
 #imports for subproject files
 from projects.focal_stats import *
@@ -17,12 +20,65 @@ qtCreatorFile = "gui.ui"
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
+class MyMplCanvas(FigureCanvas):
+    """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+
+        self.compute_initial_figure()
+
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+
+        FigureCanvas.setSizePolicy(self,
+                                   QtWidgets.QSizePolicy.Expanding,
+                                   QtWidgets.QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+
+    def compute_initial_figure(self):
+        def compute_initial_figure(self):
+            pass
+
+class MyStaticMplCanvas(MyMplCanvas):
+    """Simple canvas with a sine plot."""
+
+    def compute_initial_figure(self):
+        pass
+
+class MyDynamicMplCanvas(MyMplCanvas):
+    """A canvas that updates itself every second with a new plot."""
+
+    def __init__(self, *args, **kwargs):
+        MyMplCanvas.__init__(self, *args, **kwargs)
+        #self.pb_reset.clicked.connect(initial_figure)
+        #self.pb_route.clicked.connect(update_figure)
+
+    def initial_figure(self):
+        self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
+
+    def update_figure(self):
+        # Build a list of 4 random integers between 0 and 10 (both inclusive)
+        l = [random.randint(0, 10) for i in range(4)]
+        self.axes.cla()
+        self.axes.plot([0, 1, 2, 3], l, 'r')
+        self.draw()
+
+
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         # main init
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
+        l = QtWidgets.QVBoxLayout(self.widget_plotting)
+        sc = MyStaticMplCanvas(self.widget_plotting)#, width=5, height=4, dpi=100)
+        dc = MyDynamicMplCanvas(self.widget_plotting, width=5, height=4, dpi=100)
+        l.addWidget(sc)
+        l.addWidget(dc)
+
 
         # buttons within tab widgets
         self.info_close.clicked.connect(self.close_app)
@@ -33,10 +89,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_file_path = None
 
         #buttons in route planner
-        #self.pb_route.clicked.connect(self.route_plot)
+        self.pb_route.clicked.connect(self.route_plot)
 
         #buttons in plotting tab
-        #self.plot_plot.clicked.connect(self.plot_app)
+        self.plot_plot.clicked.connect(self.plot_app)
 
         #buttons in ct manager tab
         self.ctm_browse.clicked.connect(self.directory_browser)
@@ -62,6 +118,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         '''
         calls plotter in plot.py
         '''
+
         a1 = self.plot_a1.value()
         a2 = self.plot_a2.value()
         n1 = self.plot_n1.value()
@@ -70,6 +127,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         plotter(a1,n1)
         plotter(a2,n2)
 
+        fig.canvas.draw()
+
+        mplwidget.show()
 
     #tab switch functions
     def info_tab(self):
@@ -209,7 +269,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ctm_dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
 
     def route_plot(self):
-        pass
+        start_value = self.sb_start.value()
+        finish_value = self.sb_finish.value()
+        distance_value = self.sb_dis.currentText()
+        seed_value = self.sb_seed.value()
+
+        output = routeplanner(start_value, finish_value, distance_value, seed_value)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

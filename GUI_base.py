@@ -9,62 +9,19 @@ import subprocess as sp
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from numpy import arange, sin, pi
+from scipy.spatial import Delaunay
+from scipy.spatial.distance import pdist, squareform
+from scipy.sparse.csgraph import dijkstra
 
 #imports for subproject files
 from projects.focal_stats import *
-from projects.routeplanner import *
+#from projects.routeplanner import *
 from projects.plot import plotter
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
-
-class MyMplCanvas(FigureCanvas):
-    """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
-
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-
-        self.compute_initial_figure()
-
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
-
-        FigureCanvas.setSizePolicy(self,
-                                   QtWidgets.QSizePolicy.Expanding,
-                                   QtWidgets.QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
-
-    def compute_initial_figure(self):
-        def compute_initial_figure(self):
-            pass
-
-class MyStaticMplCanvas(MyMplCanvas):
-    """Simple canvas with a sine plot."""
-
-    def compute_initial_figure(self):
-        pass
-
-class MyDynamicMplCanvas(MyMplCanvas):
-    """A canvas that updates itself every second with a new plot."""
-
-    def __init__(self, *args, **kwargs):
-        MyMplCanvas.__init__(self, *args, **kwargs)
-        #self.pb_reset.clicked.connect(initial_figure)
-        #self.pb_route.clicked.connect(update_figure)
-
-    def initial_figure(self):
-        self.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
-
-    def update_figure(self):
-        # Build a list of 4 random integers between 0 and 10 (both inclusive)
-        l = [random.randint(0, 10) for i in range(4)]
-        self.axes.cla()
-        self.axes.plot([0, 1, 2, 3], l, 'r')
-        self.draw()
-
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -73,11 +30,59 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        l = QtWidgets.QVBoxLayout(self.widget_plotting)
-        sc = MyStaticMplCanvas(self.widget_plotting)#, width=5, height=4, dpi=100)
-        dc = MyDynamicMplCanvas(self.widget_plotting, width=5, height=4, dpi=100)
-        l.addWidget(sc)
-        l.addWidget(dc)
+        #plot in route_planner
+        self.qlayout = QtWidgets.QHBoxLayout(self.widget_route)
+        self.widget_route.setLayout(self.qlayout)
+        self.qfigWidget = QtWidgets.QWidget(self.widget_route)
+        fig = Figure((4.0, 4.0), dpi=100)
+        canvas = FigureCanvas(fig)
+        canvas.setParent(self.qfigWidget)
+
+        np.random.seed(42)
+        nodes = np.random.gamma(10, 2, size=(20, 2))
+        delaunay = Delaunay(nodes)
+        segments = list()
+
+        for simp in delaunay.simplices:
+            segments.extend(
+                [(simp[0], simp[1]), (simp[0], simp[2]), (simp[1], simp[2])])
+
+        edges = list(set(segments))
+
+        axes = fig.add_subplot(111)
+        for edge in edges:
+            axes.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
+                      color='gray')
+
+        axes.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o',
+                  color='k')
+
+        for i, node in enumerate(nodes):
+            axes.text(node[0], node[1] * 1.01, '%d' % i, color='k')
+
+        self.qlayout.addWidget(self.qfigWidget)
+        self.widget_route.show()
+
+
+        # plot in plotting
+        qlayout2 = QtWidgets.QHBoxLayout(self.widget_plotting)
+        self.widget_plotting.setLayout(qlayout2)
+        qfigWidget2 = QtWidgets.QWidget(self.widget_plotting)
+        fig2 = Figure((4.0, 4.0), dpi=100)
+        canvas2 = FigureCanvas(fig2)
+        canvas2.setParent(qfigWidget2)
+
+        axes2 = fig2.add_subplot(111)
+        x = np.arange(0.0, 5.0, 0.01)
+        func1 = 1 * np.sin(x) ** 1
+        func2 = 2* np.sin(x) ** 2
+
+        axes2.plot(x, func1)
+        axes2.plot(x, func2)
+
+        plt.grid(True)
+        qlayout2.addWidget(qfigWidget2)
+        self.widget_plotting.show()
 
 
         # buttons within tab widgets
@@ -127,9 +132,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         plotter(a1,n1)
         plotter(a2,n2)
 
-        fig.canvas.draw()
-
-        mplwidget.show()
 
     #tab switch functions
     def info_tab(self):
@@ -271,10 +273,129 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def route_plot(self):
         start_value = self.sb_start.value()
         finish_value = self.sb_finish.value()
-        distance_value = self.sb_dis.currentText()
-        seed_value = self.sb_seed.value()
+        distance_value = self.cb_dis.currentText()
 
-        output = routeplanner(start_value, finish_value, distance_value, seed_value)
+        self.routeplanner(start_value, finish_value, distance_value)
+
+        #self.qlayout.addWidget(self.qfigWidget)
+
+        #self.widget_route.show()
+
+    def route_map(self):
+
+        np.random.seed(42)
+        nodes = np.random.gamma(10, 2, size=(20, 2))
+        delaunay = Delaunay(nodes)
+        segments = list()
+
+        for simp in delaunay.simplices:
+            segments.extend(
+                [(simp[0], simp[1]), (simp[0], simp[2]), (simp[1], simp[2])])
+
+        edges = list(set(segments))
+
+        axes = fig.add_subplot(111)
+        for edge in edges:
+            axes.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
+                      color='gray')
+
+        axes.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o',
+                  color='k')
+
+        for i, node in enumerate(nodes):
+            axes.text(node[0], node[1] * 1.01, '%d' % i, color='k')
+
+        return self.widget_route.show()
+
+    def routeplanner(self, start, finish, distance):
+        if start not in range(20) or finish not in range(20) \
+                or distance not in ['eucledian', 'manhatten']:
+            raise ValueError('Wrong Input. '
+                             '\nstart and finish have to be int between 0 and 19. '
+                             '\ndistance can only be eucledian or manhatten.')
+
+        np.random.seed(42)
+        nodes = np.random.gamma(10, 2, size=(20, 2))
+        delaunay = Delaunay(nodes)
+        segments = list()
+
+        for simp in delaunay.simplices:
+            segments.extend(
+                [(simp[0], simp[1]), (simp[0], simp[2]), (simp[1], simp[2])])
+
+        edges = list(set(segments))
+
+        if distance == 'eucledian':
+            dis = squareform(pdist(nodes, metric='euclidean'))  # pythagoras
+        elif distance == 'manhatten':
+            dis = squareform(pdist(nodes, metric='cityblock'))  # 90°
+
+        ## creating the weight matrix
+
+        cs = np.zeros(dis.shape)
+        # each segment defines the indices of the edges
+        for seg in segments:
+            cs[seg] = dis[seg]
+            cs[seg[::-1]] = dis[seg]
+        cs[cs == 0.0] = np.NaN
+
+        weights, pre = dijkstra(cs, return_predecessors=True)
+
+        path = [finish]
+
+        while True:
+            next_segment = pre[start, path[-1]]
+            if next_segment == -9999:
+                # no connection: break
+                break
+            elif next_segment == start:
+                # finished: break
+                break
+            else:
+                # new segment, add to path
+                path.append(next_segment)
+        path.append(start)
+        reversed(path)
+
+        title = 'Path %s to %s: ' % (start, finish), ' - '.join(
+            ['%d' % _ for _ in reversed(path)])
+
+        figr = Figure((4.0, 4.0), dpi=100)
+        canvasr = FigureCanvas(figr)
+        canvasr.setParent(self.qfigWidget)
+
+        # plot
+        axesr = figr.add_subplot(111)
+
+        # plot the vertices
+        axesr.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o',
+                  color='gray')
+
+        for i, node in enumerate(nodes):
+            axesr.text(node[0], node[1] * 1.01, '%d' % i, color='gray')
+
+        # plot the edges
+        for edge in edges:
+            axesr.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
+                      color='k')
+
+        # plot the path
+        for i in range(1, len(path)):
+            axesr.plot(nodes[(path[i - 1], path[i]),][:, 0],
+                      nodes[(path[i - 1], path[i]),][:, 1], '-g', lw=2)
+
+        # plot start and end point
+        axesr.plot(nodes[path[0]][0], nodes[path[0]][1], 'or', markersize=9)
+        axesr.plot(nodes[path[-1]][0], nodes[path[-1]][1], 'og', markersize=9)
+
+        #plt.suptitle(title[0] + title[1])
+
+        self.qlayout.addWidget(self.qfigWidget)
+
+        return self.widget_route.show()
+
+
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

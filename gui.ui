@@ -473,7 +473,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="plot_a1"/>
+          <widget class="QSpinBox" name="plot_a1">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -487,7 +491,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="plot_n1"/>
+          <widget class="QSpinBox" name="plot_n1">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -501,7 +509,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="plot_a2"/>
+          <widget class="QSpinBox" name="plot_a2">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -515,7 +527,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="plot_n2"/>
+          <widget class="QSpinBox" name="plot_n2">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

@@ -1,11 +1,12 @@
 #imports
 import sys
+import os
 
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from html.parser import HTMLParser
 import webbrowser as wb
-import subprocess as sp
+import IPython
 
 #imports for subproject files
 from projects.focal_stats import *
@@ -13,7 +14,7 @@ from projects.routeplanner import *
 from projects.plot import plotter
 
 #insert gui.ui file
-qtCreatorFile = "gui.ui"
+qtCreatorFile = 'gui.ui'
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -46,9 +47,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fs_close.clicked.connect(self.close_tab)
         self.info_close.clicked.connect(self.close_tab)
 
-
-        #self.tabCloseRequested(self.close_tab)
-
         # menu buttons
             # file submenu
         self.menu_close.triggered.connect(self.close_app)
@@ -67,14 +65,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     #tab close functions
     def close_tab(self):
-        QtWidgets.QTabWidget.removeTab(self.tabWidget, QtWidgets.QTabWidget.currentIndex(self.tabWidget))
+        choise = QtWidgets.QMessageBox.question(self,
+        'Tab Close',
+        'Are you sure you want to close the tab? \nTabs cannot be reopened.',
+        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if choise == QtWidgets.QMessageBox.Yes:
+            QtWidgets.QTabWidget.removeTab(self.tabWidget,
+            QtWidgets.QTabWidget.currentIndex(self.tabWidget))
+        else:
+            pass
 
     #tab switch functions
     def info_tab(self):
-        if QtWidgets.QTabWidget.tabRemoved(self.tabWidget, 0) == True:
-            QtWidgets.QTabWidget.insertTab(self.tabWidget, 0, self.tab, 0, 'INFO')
-        else:
-            self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(0)
 
     def fs_tab(self):
         self.tabWidget.setCurrentIndex(1)
@@ -90,10 +93,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def ipython_app(self):
         '''
-        opens a new ipython/jupyter window as new tab
-        in standard browser
+        opens a new ipython console
         '''
-        sp.call("ipython notebook")
+        IPython.start_ipython()
 
     def browser_app(self):
         '''
@@ -111,7 +113,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                              '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
                              '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
                              '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '<li>Rafael. <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
                              '</ul>')
 
         QtWidgets.QMessageBox.about(self, 'Contact', text)
@@ -130,7 +131,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         close application for the programm. called by close button and file->close
         '''
         choise = QtWidgets.QMessageBox.question(self,
-                                                "Close",
+                                                'Close',
                                                 'You are closing the application. Are you sure?',
                                                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choise == QtWidgets.QMessageBox.Yes:
@@ -148,7 +149,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                              '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
                              '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
                              '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '<li>Rafael <a href="mailto:rafaelbr90@gmail.com">rafaelbr90@gmail.com</a></li>'
                              '</ul>'
                              'as part of Python II course at Albert-Ludwigs-Universität Freiburg'
                              '<br>'
@@ -227,8 +227,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         n1 = self.plot_n1.value()
         n2 = self.plot_n2.value()
 
-        plotter(a1,n1)
-        plotter(a2,n2)
+        plotter(a1,n1, a2, n2)
 
 
 

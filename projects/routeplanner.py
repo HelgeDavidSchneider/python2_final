@@ -6,8 +6,6 @@ The route planner calculates the path from one point to another,
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from scipy.spatial import Delaunay
 from scipy.spatial.distance import pdist, squareform
 from scipy.sparse.csgraph import dijkstra
@@ -26,7 +24,7 @@ def nodes_plot():
 
 	edges = list(set(segments))
 
-	axes = fig.add_subplot(111)
+	fig, axes = plt.subplot(111)
 	for edge in edges:
 		axes.plot(nodes[edge,][:, 0], nodes[edge,][:, 1], linestyle='-',
 				  color='gray')
@@ -37,7 +35,7 @@ def nodes_plot():
 	for i, node in enumerate(nodes):
 		axes.text(node[0], node[1] * 1.01, '%d' % i, color='k')
 
-	return self.widget_route.show()
+	return plt.show()
 
 
 def routeplanner(start, finish, distance):
@@ -93,12 +91,9 @@ def routeplanner(start, finish, distance):
 	title = 'Path %s to %s: ' % (start, finish), ' - '.join(
 		['%d' % _ for _ in reversed(path)])
 
-	fig = Figure((4.0, 4.0), dpi=100)
-	canvas = FigureCanvas(fig)
-	canvas.setParent(self.qfigWidget)
-
 	# plot
-	axes = fig.add_subplot(111)
+	plt.figure('Route Planner')
+	axes = plt.subplot(111)
 
 	# plot the vertices
 	axes.plot(nodes[:, 0], nodes[:, 1], linestyle='', marker='o', color='gray')
@@ -121,3 +116,7 @@ def routeplanner(start, finish, distance):
 	axes.plot(nodes[path[-1]][0], nodes[path[-1]][1], 'og', markersize=9)
 
 	plt.suptitle(title[0] + title[1])
+
+	return plt.show()
+
+

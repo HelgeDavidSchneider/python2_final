@@ -212,7 +212,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 '<li>Choose filter type</li>'
                 '<li>Choose function type</li>'
                 '<li>Press Run</li>'
-                '<li>Choose Parameters. Not That:</li>'
+                '<li>Choose Parameters. Note That:</li>'
                 '<ul>'
                 '<li>Square filter requires: Squarelength</li>'
                 '<li>Rectangle filter requires: both Shape parameters</li>'

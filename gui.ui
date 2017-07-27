@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>0</number>
     </property>
     <property name="tabsClosable">
      <bool>false</bool>
@@ -44,7 +44,7 @@
       </property>
       <property name="url">
        <url>
-        <string>file:///E:/DropBox/Dropbox/STUDIGEDÖNS/fächer/python 2/projekte/final_git/python2_final/docu.html</string>
+        <string>qrc:/html/docu.html</string>
        </url>
       </property>
      </widget>

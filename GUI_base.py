@@ -76,23 +76,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
     def rp_infoipnb(self):
-
         """
-        rel_path = "documents/05_Scipy.ipynb"
+        opens 05_Scipy.ipynb as html in browser
+        """
+        rel_path = "documents/05_Scipy.html"
         abs_file_path = os.path.join(self.script_dir, rel_path)
-
-        import nbformat
-        from nbconvert import PythonExporter
-
-        with open(abs_file_path) as fh:
-            nb = nbformat.reads(fh.read(), nbformat.NO_CONVERT)
-
-        exporter = PythonExporter()
-        source, meta = exporter.from_notebook_node(nb)
-
-        with open(abs_file_path, 'w+') as fh:
-            fh.writelines(source.encode('utf-8'))
-        """
+        os.startfile(abs_file_path)
 
     def ctm_infopdf(self):
         """

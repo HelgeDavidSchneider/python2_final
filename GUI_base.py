@@ -9,7 +9,7 @@ import webbrowser as wb
 import IPython
 import subprocess
 
-#imports for subproject files
+# imports for subproject files
 from projects.focal_stats import *
 from projects.routeplanner import *
 from projects.plot import plotter
@@ -119,10 +119,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                                                 'Are you sure you want to '
                                                 'close the tab? \nTabs cannot '
                                                 'be reopened.',
-        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+                                                QtWidgets.QMessageBox.Yes |
+                                                QtWidgets.QMessageBox.No)
         if choise == QtWidgets.QMessageBox.Yes:
             QtWidgets.QTabWidget.removeTab(self.tabWidget,
-            QtWidgets.QTabWidget.currentIndex(self.tabWidget))
+                                           QtWidgets.QTabWidget.currentIndex(
+                                               self.tabWidget))
         else:
             pass
 
@@ -285,10 +287,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, 'Documentation', text)
 
     def close_app(self):
-        '''
+        """
         close application for the programm.
         called by close button and file->close
-        '''
+        """
         choise = QtWidgets.QMessageBox.question(
             self,
             'Close',
@@ -328,7 +330,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             'joao.pereira@felis.uni-freiburg.de</a></li>'
             '</ul>')
 
-
         QtWidgets.QMessageBox.about(self, 'About', text)
 
     def fs_run_filter(self):
@@ -338,7 +339,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         with set parameters.
         opens pop-up with original and filtered image
         """
-        #var def
+        # var def
         filter_type = self.fs_filter_type.currentText()
         function_type = self.fs_function_type.currentText()
         squarelength = None
@@ -364,7 +365,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         img_path = (str(self.fs_file_path))
 
         # calling filter function from focal_stats.py
-        filter_main(img_path = img_path,
+        filter_main(img_path=img_path,
                     filtertype=filter_type.lower(),
                     functiontype=function_type,
                     squarelength=squarelength,
@@ -389,7 +390,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         returns chosen folder as path string
         """
         self.ctm_dir = str(QFileDialog.getExistingDirectory(self,
-                                                        "Select Directory"))
+                                                            "Select "
+                                                            "Directory"))
 
     def route_plot(self):
         """
@@ -411,8 +413,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         n1 = self.plot_n1.value()
         n2 = self.plot_n2.value()
 
-        plotter(a1,n1, a2, n2)
-
+        plotter(a1, n1, a2, n2)
 
 
 # opening the allpication

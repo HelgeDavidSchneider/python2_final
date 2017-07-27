@@ -1,11 +1,3 @@
-"""
-TODO
-
-every knot is used in every file, this is somehow unexpected.
-Search why there is no knot excluded and correct the function.
-Please check the reliability of all other columns in the output frames as well
-"""
-
 import pandas as pd
 import numpy as np
 import os
@@ -16,14 +8,17 @@ from math import tan, log, pi
 def ako_folder(folderpath):
     """
     ako_folder iterates over all knot files given in folderpath
-    for every file it calculates the two wanted output frames and adds them to the final output
+    for every file it calculates the two wanted output frames and adds them to
+    the final output
     the output database is then written to an excel file
     """
 
     # CREATE output data frames
     df_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
     df2_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
-    knot_table = pd.DataFrame(columns=['file', 'Knots in total', 'Excluded knots', 'Remaining knots', 'Percentage of usable knots'])
+    knot_table = pd.DataFrame(columns=['file', 'Knots in total',
+                                       'Excluded knots', 'Remaining knots',
+                                       'Percentage of usable knots'])
     df_index = 0
 
     # ITERATE over all knot files in the folderpath
@@ -56,10 +51,13 @@ def ako_folder(folderpath):
     df2_final = df2_final.round(2)
 
     # sort the columns
-    df_final = df_final[['Tree', 'Log', 'Knot', 'RadialPosition_mm', 'Diameter_mm', 'Zposition_mm',
-                             'Azimuth_deg', 'Sound_pos', 'HSlimit_mm', 'WBlimit_mm', 'Outlimit_mm', 'Heartwood_point']]
-    df2_final = df2_final[['Tree', 'Log', 'Knot', 'Azimuth_deg', 'KE_mm', 'DKB_mm',
-                                       'Sound_knot', 'C_mm', 'HSlimit_mm', 'WBlimit_mm', 'Outlimit_mm']]
+    df_final = df_final[['Tree', 'Log', 'Knot', 'RadialPosition_mm',
+                         'Diameter_mm', 'Zposition_mm',
+                             'Azimuth_deg', 'Sound_pos', 'HSlimit_mm',
+                         'WBlimit_mm', 'Outlimit_mm', 'Heartwood_point']]
+    df2_final = df2_final[['Tree', 'Log', 'Knot', 'Azimuth_deg', 'KE_mm',
+                           'DKB_mm', 'Sound_knot', 'C_mm', 'HSlimit_mm',
+                           'WBlimit_mm', 'Outlimit_mm']]
 
     # CREATE new folder if needed
     if not os.path.exists(folderpath + '/output'):
@@ -80,7 +78,8 @@ def ako_multi(filepath, df_index):
     """
     ako_multi creates returns the multi database for a single knot file
     first it creates a table with information about the used knots
-    afterwards it iterates over the rows of the given file and calculates the wanted information
+    afterwards it iterates over the rows of the given file and calculates
+    the wanted information
     """
 
     # IMPORT file
@@ -93,6 +92,7 @@ def ako_multi(filepath, df_index):
     df = df[df.iloc[:, 4] != 0]
     df = df[df.iloc[:, 5] != 0]
     df = df[df.iloc[:, 6] != 0]
+
     remaining = df.shape[0]
     excluded = total - remaining
     percentage = remaining / total * 100
@@ -133,7 +133,8 @@ def ako_row(dfr):
     ako_row calculates the wanted variables of a knot file for a single row
     """
 
-    dfr_out = pd.DataFrame({'RadialPosition_mm': list(np.arange(20, dfr.iloc[7], 20))})
+    dfr_out = pd.DataFrame({'RadialPosition_mm':
+                                list(np.arange(20, dfr.iloc[7], 20))})
     dfr_out['Diameter_mm'] = [abs(tan((dfr[0] + (dfr[1] * R ** 0.25))) * 2 * R)
                               for R in dfr_out.RadialPosition_mm]
     dfr_out['Zposition_mm'] = [dfr[4] + (dfr[5] * R ** 0.5 + dfr[6] * R)
@@ -152,17 +153,20 @@ def ako_combine(filepath, df_out, tree_id, log_id):
 
     for filename in os.listdir(os.path.dirname(filepath)):
 
-        if 'sapPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'sapPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             sappath = os.path.dirname(filepath) + '/' + filename
             df_sap = pd.read_csv(sappath, delimiter=',', header=None)
 
-        if 'barkPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'barkPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             barkpath = os.path.dirname(filepath) + '/' + filename
             df_bark = pd.read_csv(barkpath, delimiter=',', header=None)
 
-        if 'borderPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'borderPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             borderpath = os.path.dirname(filepath) + '/' + filename
             df_border = pd.read_csv(borderpath, delimiter=',', header=None)
@@ -225,7 +229,9 @@ def ako_one(filepath):
 
 def ako_one_row(dfr):
 
-    dfr_out = pd.DataFrame({'Azimuth_deg': [((dfr[2] + dfr[3] * log(abs(dfr.iloc[7] + 0.001))) * 360) / (2 * pi)]})
+    dfr_out = pd.DataFrame({'Azimuth_deg': [((dfr[2] + dfr[3]
+                                             * log(abs(dfr.iloc[7] + 0.001)))
+                                             * 360) / (2 * pi)]})
     dfr_out['RadialPosition_mm'] = dfr.iloc[7]
     dfr_out['DKB_mm'] = dfr[8]
     dfr_out['KE_mm'] = dfr[7]
@@ -238,17 +244,20 @@ def ako_one_combine(df_out, filepath, tree_id, log_id):
 
     for filename in os.listdir(os.path.dirname(filepath)):
 
-        if 'sapPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'sapPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             sappath = os.path.dirname(filepath) + '/' + filename
             df_sap = pd.read_csv(sappath, delimiter=',', header=None)
 
-        if 'barkPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'barkPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             barkpath = os.path.dirname(filepath) + '/' + filename
             df_bark = pd.read_csv(barkpath, delimiter=',', header=None)
 
-        if 'borderPolar' in filename and filename.split('_')[1] == '%s' % tree_id \
+        if 'borderPolar' in filename \
+                and filename.split('_')[1] == '%s' % tree_id \
                 and filename.split('_')[2] == '%s' % log_id:
             borderpath = os.path.dirname(filepath) + '/' + filename
             df_border = pd.read_csv(borderpath, delimiter=',', header=None)
@@ -277,8 +286,10 @@ def ako_one_combine(df_out, filepath, tree_id, log_id):
 
     return df_out
 
-'''
-# Test
-folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT_manager/Data_Part_2"
-df1, df2, knot_table = ako_folder(folderpath)
-'''
+if __name__ == '__main__':
+    # Test
+    folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects" \
+                 "/CT_manager/Data_Part_2"
+    filepath = folderpath + '/knotsParametric@Dgl_623_1_2015_05_20.csv'
+    df1, df2, knot_table = ako_folder(folderpath)
+

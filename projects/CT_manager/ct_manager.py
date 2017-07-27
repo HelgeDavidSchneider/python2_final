@@ -1,23 +1,21 @@
-"""
-TODO
-
-Check the reliability of all columns in the output frames.
-"""
-
 import pandas as pd
 import numpy as np
 import os
 import openpyxl
 
+
 def imk_folder(folderpath):
     """
-    imk_folder iterates over all knot files in folderpath and calculates the wanted data
-    the data is stored in df_final and df2_final, processed and finally written to an excel sheet
+    imk_folder iterates over all knot files in folderpath and calculates the
+    wanted data the data is stored in df_final and df2_final, processed and
+    finally written to an excel sheet
 
     """
     # CREATE output data frames
-    df_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot', 'RadialPosition_mm', 'DiameterV_mm', 'DiameterH_mm',
-                                   'MeanDiameter_mm', 'Zposition_mm', 'Sound_pos'])
+    df_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot',
+                                     'RadialPosition_mm', 'DiameterV_mm',
+                                     'DiameterH_mm', 'MeanDiameter_mm',
+                                     'Zposition_mm', 'Sound_pos'])
     df2_final = pd.DataFrame(columns=['Tree', 'Log', 'Knot'])
 
     knot = 1
@@ -31,8 +29,8 @@ def imk_folder(folderpath):
 
     # PROCESS data
     df2_final['Knot'] = np.arange(1, df2_final.shape[0] + 1)
-    df2_final = df2_final[['Tree', 'Log', 'Knot', 'DKB_mm', 'KE_mm', 'Azimuth_deg',
-                           'sound_knot']]
+    df2_final = df2_final[['Tree', 'Log', 'Knot', 'DKB_mm', 'KE_mm',
+                           'Azimuth_deg', 'sound_knot']]
 
     # CREATE new folder if needed
     if not os.path.exists(folderpath + '/output'):
@@ -47,10 +45,11 @@ def imk_folder(folderpath):
 
 
 def imk_file(filepath, knot):
-
     # IMPORT (very unpypythonic, ignore)
-    heading = pd.read_csv(filepath, delim_whitespace=True, nrows=2, header=None)  # first two rows
-    df = pd.read_csv(filepath, delim_whitespace=True, skiprows=[0, 1, 2], header=None)  # data frame without third line
+    heading = pd.read_csv(filepath, delim_whitespace=True, nrows=2,
+                          header=None)  # first two rows
+    df = pd.read_csv(filepath, delim_whitespace=True, skiprows=[0, 1, 2],
+                     header=None)  # data frame without third line
     with open(filepath) as f:  # get the third line extra
         for i, line in enumerate(f):
             if i == 3:
@@ -64,12 +63,14 @@ def imk_file(filepath, knot):
     log_id = int(heading.iloc[0, 0].split('_')[2])
 
     # CREATE new output_frames
-    df_out = pd.DataFrame(columns=['Tree', 'Log', 'Knot', 'RadialPosition_mm', 'DiameterV_mm', 'DiameterH_mm',
-                                     'MeanDiameter_mm', 'Zposition_mm', 'Sound_pos'])
-    df2_out = pd.DataFrame(columns=['Tree', 'Log', 'Knot', 'DKB_mm', 'ke_mm', 'Azimuth_deg'])
+    df_out = pd.DataFrame(columns=['Tree', 'Log', 'Knot', 'RadialPosition_mm',
+                                   'DiameterV_mm', 'DiameterH_mm',
+                                   'MeanDiameter_mm', 'Zposition_mm',
+                                   'Sound_pos'])
+    df2_out = pd.DataFrame(columns=['Tree', 'Log', 'Knot', 'DKB_mm', 'ke_mm',
+                                    'Azimuth_deg'])
 
     for index in range(0, df.shape[0] - df.shape[0] % 4, 4):
-
         # EXTRACT group
         dfg = df[index:index + 4]
 
@@ -96,7 +97,6 @@ def imk_file(filepath, knot):
 
 # Database 1 function
 def imk_group(dfg):
-
     # save val for coming calculations
     _dfg = dfg
 
@@ -110,9 +110,12 @@ def imk_group(dfg):
     dfg_out['RadialPosition_mm'] = list(range(20, dfg.shape[1] * 20 + 20, 20))
     dfg_out['DiameterV_mm'] = dfg.iloc[2, :]
     dfg_out['DiameterH_mm'] = dfg.iloc[1, :]
-    dfg_out['MeanDiameter_mm'] = [np.mean([x, y]) for x, y in zip(dfg.iloc[2, :], dfg.iloc[1, :])]
-    dfg_out['Zposition_mm'] = dfg.iloc[dfg.shape[0] - 1, :] + float(_dfg.iloc[0, 2])
-    dfg_out['Sound_pos'] = [_ > float(_dfg.iloc[0, 3]) for _ in dfg_out['RadialPosition_mm']]
+    dfg_out['MeanDiameter_mm'] = [np.mean([x, y]) for x, y in
+                                  zip(dfg.iloc[2, :], dfg.iloc[1, :])]
+    dfg_out['Zposition_mm'] = dfg.iloc[dfg.shape[0] - 1, :] \
+                              + float(_dfg.iloc[0, 2])
+    dfg_out['Sound_pos'] = [_ > float(_dfg.iloc[0, 3]) for _ in
+                            dfg_out['RadialPosition_mm']]
     dfg_out.Sound_pos = dfg_out.Sound_pos.astype(int)
 
     return dfg_out
@@ -120,7 +123,6 @@ def imk_group(dfg):
 
 # Database 2 function
 def imk_knot(dfg):
-
     df2_out = pd.DataFrame(data=[[0] * 3], columns=['Tree', 'Log', 'Knot'])
 
     if dfg.iloc[0, 4] is not -1:
@@ -146,12 +148,15 @@ def imk_knot(dfg):
     return df2_out
 
 
-# DEFINE data path
-'''
-folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT_manager/Data_Part_1"
-filepath = folderpath + '/Knots@Dgl_623_10_2015_05_28.kno'
+if __name__ == '__main__':
 
-folderpath = 'E:/DropBox/Dropbox/STUDIGEDÖNS/fächer/python 2/projekte/final_git/python2_final/projects/CT_manager/Data_Part_1'
+    # DEFINE data path
+    folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects" \
+                 "/CT_manager/Data_Part_1"
+    filepath = folderpath + '/Knots@Dgl_623_10_2015_05_28.kno'
 
-df1, df2 = imk_folder(folderpath)
-'''
+    folderpath = 'E:/DropBox/Dropbox/STUDIGEDÖNS/fächer/python 2/projekte' \
+                 '/final_git/python2_final/projects/CT_manager/Data_Part_1'
+
+    df1, df2 = imk_folder(folderpath)
+

@@ -1,4 +1,4 @@
-#imports
+# imports
 import sys
 import os
 
@@ -15,10 +15,11 @@ from projects.plot import plotter
 from projects.CT_manager.ct_manager import *
 from projects.CT_manager.ct_manager_automatic import *
 
-#insert gui.ui file
+# insert gui.ui file
 qtCreatorFile = 'gui.ui'
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -27,26 +28,26 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        #connect input buttons from gui to functions
-        #and set class attributes
+        # connect input buttons from gui to functions
+        # and set class attributes
 
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
         self.fs_file_path = None
 
-        #buttons in route planner
+        # buttons in route planner
         self.pb_route.clicked.connect(self.route_plot)
 
-        #buttons in plotting tab
+        # buttons in plotting tab
         self.plot_plot.clicked.connect(self.plot_app)
 
-        #buttons in ct manager tab
+        # buttons in ct manager tab
         self.ctm_browse.clicked.connect(self.directory_browser)
         self.ctm_run.clicked.connect(self.ctm_app)
         self.ctm_dir = None
 
-        #tab close buttons
+        # tab close buttons
         self.plt_close.clicked.connect(self.close_tab)
         self.rp_close.clicked.connect(self.close_tab)
         self.ct_close.clicked.connect(self.close_tab)
@@ -54,15 +55,15 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.info_close.clicked.connect(self.close_tab)
 
         # menu buttons
-            # file submenu
+        # file submenu
         self.menu_close.triggered.connect(self.close_app)
         self.menu_ipython.triggered.connect(self.ipython_app)
         self.menu_browser.triggered.connect(self.browser_app)
-            # help submenu
+        # help submenu
         self.menu_docu.triggered.connect(self.docu_app)
         self.menu_contact.triggered.connect(self.contact_app)
         self.menu_about.triggered.connect(self.about_app)
-            # toolbar submenu
+        # toolbar submenu
         self.menu_info.triggered.connect(self.info_tab)
         self.menu_fs.triggered.connect(self.fs_tab)
         self.menu_ctm.triggered.connect(self.ctm_tab)
@@ -70,36 +71,40 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
     def ctm_app(self):
-        '''
+        """
         called by run button in CT Manager tab
         calls chosen function from ct_manager.py
         /ct_manager_automatic.py
-        '''
+        """
         if self.ctm_auto.isChecked():
             ako_folder(self.ctm_dir)
         if self.ctm_manu.isChecked():
             imk_folder(self.ctm_dir)
 
     def close_tab(self):
-        '''
+        """
         closes current tab in gui permanently
-        '''
+        """
         choise = QtWidgets.QMessageBox.question(self,
-        'Tab Close',
-        'Are you sure you want to close the tab? \nTabs cannot be reopened.',
+                                                'Tab Close',
+                                                'Are you sure you want to '
+                                                'close the tab? \nTabs cannot '
+                                                'be reopened.',
         QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choise == QtWidgets.QMessageBox.Yes:
             QtWidgets.QTabWidget.removeTab(self.tabWidget,
             QtWidgets.QTabWidget.currentIndex(self.tabWidget))
         else:
             pass
+    """
+    tab switch functions
+    0=info
+    1=focal stats
+    2=ct manager
+    3=routeplaner
+    4=plotting
+    """
 
-    #tab switch functions
-    #0=info
-    #1=focal stats
-    #2=ct manager
-    #3=routeplaner
-    #4=plotting
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 
@@ -116,21 +121,21 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tabWidget.setCurrentIndex(4)
 
     def ipython_app(self):
-        '''
+        """
         opens a new ipython console
-        '''
+        """
         IPython.start_ipython()
 
     def browser_app(self):
-        '''
+        """
         opens a new Uni Freiburg tab in standard browser
-        '''
+        """
         wb.open_new('https://www.unr.uni-freiburg.de/')
 
     def contact_app(self):
-        '''
+        """
         opens a message box with contact details
-        '''
+        """
         html = HTMLParser()
         text = html.unescape(
             'If you have any questions or problems, please contact us:<br>'
@@ -147,10 +152,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, 'Contact', text)
 
     def docu_app(self):
-        '''
+        """
         opens a new message box with information
-        '''
-        #detect current tab and adress text accordingly
+        """
+        # detect current tab and adress text accordingly
         html = HTMLParser()
         if self.tabWidget.currentIndex() == 0:
             # 0=info
@@ -238,9 +243,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 '<li>Choose Parameters</li>'
                 '<li>Press Plot</li>'
                 '</ol>'
-
             )
-
 
         QtWidgets.QMessageBox.about(self, 'Documentation', text)
 
@@ -260,9 +263,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
 
     def about_app(self):
-        '''
+        """
         opens message box about the program's making
-        '''
+        """
         html = HTMLParser()
         text = html.unescape(
             'This App was programmed by:<br>'
@@ -292,12 +295,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMessageBox.about(self, 'About', text)
 
     def fs_run_filter(self):
-        '''
+        """
         function within focal Statistic tab
         calls filter_main from focal_stats.py
         with set parameters.
         opens pop-up with original and filtered image
-        '''
+        """
         #var def
         filter_type = self.fs_filter_type.currentText()
         function_type = self.fs_function_type.currentText()
@@ -306,7 +309,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         radius = None
         angle = None
 
-        #swtich through filter types
+        # swtich through filter types
         if filter_type.lower() == 'square':
             squarelength = self.fs_squarelength.value()
         elif filter_type.lower() == 'rectangular':
@@ -318,12 +321,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                      self.fs_shape_1.value(),
                      self.fs_shape_2.value())
 
-        #format
+        # format
         function_type=function_type.replace("Standard Deviation", "std")\
             .replace("Maximum", "max").replace("Minimum", "min").lower()
         img_path = (str(self.fs_file_path))
 
-        #calling filter function from focal_stats.py
+        # calling filter function from focal_stats.py
         filter_main(img_path = img_path,
                     filtertype=filter_type.lower(),
                     functiontype=function_type,
@@ -332,29 +335,29 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     angles=angle)
 
     def file_browser(self):
-        '''
+        """
         General Filebrowse function
         returns chosen file's directory
-        '''
+        """
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        self.fs_file_path, _ = QFileDialog.getOpenFileName(self,
-                                            "QFileDialog.getOpenFileName()",
-                                            "",
-                                            "All files(*)",
-                                            options=options)
+        self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog."
+                                                                 "getOpenFile"
+                                                                 "Name()", "",
+                                                           "All files(*)",
+                                                           options=options)
 
     def directory_browser(self):
-        '''
+        """
         returns chosen folder as path string
-        '''
+        """
         self.ctm_dir = str(QFileDialog.getExistingDirectory(self,
                                                         "Select Directory"))
 
     def route_plot(self):
-        '''
+        """
         calls routeplanner from routeplanner.py with chosen parameters
-        '''
+        """
         start_value = self.sb_start.value()
         finish_value = self.sb_finish.value()
         distance_value = self.cb_dis.currentText()
@@ -362,9 +365,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         routeplanner(start_value, finish_value, distance_value)
 
     def plot_app(self):
-        '''
+        """
         calls plotter in plot.py
-        '''
+        """
 
         a1 = self.plot_a1.value()
         a2 = self.plot_a2.value()
@@ -374,9 +377,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         plotter(a1,n1, a2, n2)
 
 
-'''
-opening the allpication
-'''
+
+# opening the allpication
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()

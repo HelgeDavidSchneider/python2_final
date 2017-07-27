@@ -27,6 +27,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
+        #connect input buttons from gui to functions
+        #and set class attributes
+
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
@@ -67,27 +70,20 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_plotting.triggered.connect(self.plotting_tab)
 
     def ctm_app(self):
+        '''
+        called by run button in CT Manager tab
+        calls chosen function from ct_manager.py
+        /ct_manager_automatic.py
+        '''
         if self.ctm_auto.isChecked():
             ako_folder(self.ctm_dir)
-            print(self.ctm_dir)
         if self.ctm_manu.isChecked():
             imk_folder(self.ctm_dir)
-            print(self.ctm_dir)
 
-    def plot_app(self):
-        '''
-        calls plotter in plot.py
-        '''
-        a1 = self.plot_a1.value()
-        a2 = self.plot_a2.value()
-        n1 = self.plot_n1.value()
-        n2 = self.plot_n2.value()
-
-        plotter(a1,n1)
-        plotter(a2,n2)
-
-    #tab close functions
     def close_tab(self):
+        '''
+        closes current tab in gui permanently
+        '''
         choise = QtWidgets.QMessageBox.question(self,
         'Tab Close',
         'Are you sure you want to close the tab? \nTabs cannot be reopened.',
@@ -99,6 +95,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
 
     #tab switch functions
+    #0=info
+    #1=focal stats
+    #2=ct manager
+    #3=routeplaner
+    #4=plotting
     def info_tab(self):
         self.tabWidget.setCurrentIndex(0)
 
@@ -131,12 +132,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         opens a message box with contact details
         '''
         html = HTMLParser()
-        text = html.unescape('If you have any questions or problems, please contact us:<br>'
-                             '<ul>'
-                             '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
-                             '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
-                             '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '</ul>')
+        text = html.unescape(
+            'If you have any questions or problems, please contact us:<br>'
+            '<ul>'
+            '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">'
+            'tenberg.a@posteo.de</a></li>'
+            '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net'
+            '</a></li>'
+            '<li>Helge Schneider '
+            '<a href="mailto:info.helgeschneider@gmail.com">'
+            'info.helgeschneider@gmail.com</a></li>'
+            '</ul>')
 
         QtWidgets.QMessageBox.about(self, 'Contact', text)
 
@@ -144,19 +150,107 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         '''
         opens a new message box with information
         '''
-        text = u"""
-                See Info Tab for documentation
-                """
+        #detect current tab and adress text accordingly
+        html = HTMLParser()
+        if self.tabWidget.currentIndex() == 0:
+            # 0=info
+            text = html.unescape(
+                'Get short information about Incredible app &trade;'
+            )
+        if self.tabWidget.currentIndex() == 1:
+            # 1=focal stats
+            text = html.unescape(
+                '<b>This is how to use Focal Statistics</b>, an App that'
+                ' filter images and plots<br> them along with the original'
+                ' image.'
+                '<ol type="1">'
+                '<li>Browse for an image file</li>'
+                '<li>Choose filter type</li>'
+                '<li>Choose function type</li>'
+                '<li>Press Run</li>'
+                '<li>Choose Parameters. Not That:</li>'
+                '<ul>'
+                '<li>Square filter requires: Squarelength</li>'
+                '<li>Rectangle filter requires: both Shape parameters</li>'
+                '<li>Circle filter requires: Radius</li>'
+                '<li>Wedge filter requires: Radius and both Angles</li>'
+                '</ul>'
+                '<li>Also note that:</li>'
+                '<ul>'
+                '<li>Unused parameters will be ignored</li>'
+                '<li>If needed parameters are not given,<br> the function will'
+                ' not work</li>'
+                '<li>Parameters with values smaller than their minimum <br>'
+                'values are given, the function will not work</li>'
+                '<li>Depending on image size, the function <br>will need several'
+                'minutes to finish</li>'
+                '</ul>'
+                '</ol>'
+
+            )
+        if self.tabWidget.currentIndex() == 2:
+            # 2=ct manager
+            text = html.unescape(
+                '<b>This is how to use CT Manager</b>, an App<br>'
+                ' that takes input folders from CT output files<br>'
+                ' and creates a formatted excel sheet of it. There <br>'
+                ' are two types:'
+                '<ul>'
+                '<li>If the data files are from the manual output (.txt files),'
+                '<br>'
+                'the output file will be called “Manual_KnotData” and willl be'
+                '<br>'
+                'saved in the datafolder/output.<br>'
+                'The first tab “Multi_imgMan” will contain various <br>'
+                'measurements per knot, and the second tab “One_imgMan” <br>'
+                'will contain only one measurement per knot.</li>'
+                '<li>If the data files are from the manual output (.txt files),'
+                '<br>'
+                'the output file will be called “Manual_KnotData” and be<br>'
+                ' saved in the datafolder/output.<br>'
+                'The first tab “Multi_imgMan” will contain various<br>'
+                ' measurements per knot and the second tab “One_imgMan”<br>'
+                'will contain only one measurement per knot.'
+            )
+        if self.tabWidget.currentIndex() == 3:
+            # 3=routeplaner
+            text = html.unescape(
+                '<b>This is how to use Route Planer</b>, an App<br>'
+                ' that finds the fastest route in a map of 19 connected<br>'
+                ' nodes from a given start to end node.'
+                '<ol>'
+                '<li>Choose start node</li>'
+                '<li>Choose finish node</li>'
+                '<li>Choose distance type</li>'
+                '<li>Press route</li>'
+                '</ol>'
+            )
+        if self.tabWidget.currentIndex() == 4:
+            # 4=plotting
+            text = html.unescape(
+                '<b>This is how to use Plotting</b>, an App<br>'
+                ' that plots two sin curves with two parameters<br>'
+                ' of the shown formula.'
+                '<ol>'
+                '<li>Choose Parameters</li>'
+                '<li>Press Plot</li>'
+                '</ol>'
+
+            )
+
+
         QtWidgets.QMessageBox.about(self, 'Documentation', text)
 
     def close_app(self):
         '''
-        close application for the programm. called by close button and file->close
+        close application for the programm.
+        called by close button and file->close
         '''
-        choise = QtWidgets.QMessageBox.question(self,
-                                                'Close',
-                                                'You are closing the application. Are you sure?',
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        choise = QtWidgets.QMessageBox.question(
+            self,
+            'Close',
+            'You are closing the application. Are you sure?',
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choise == QtWidgets.QMessageBox.Yes:
             sys.exit()
         else:
@@ -164,22 +258,32 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def about_app(self):
         '''
-        opens message box about the program
+        opens message box about the program's making
         '''
         html = HTMLParser()
-        text = html.unescape('This App was programmed by:<br>'
-                             '<ul>'
-                             '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">tenberg.a@posteo.de</a></li>'
-                             '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net</a></li>'
-                             '<li>Helge Schneider <a href="mailto:info.helgeschneider@gmail.com">info.helgeschneider@gmail.com</a></li>'
-                             '</ul>'
-                             'as part of Python II course at Albert-Ludwigs-Universität Freiburg'
-                             '<br>'
-                             'held by:'
-                             '<ul>'
-                             '<li>Mirko Mälicke <a href="mailto:mirko.maelicke@felis.uni-freiburg.de">mirko.maelicke@felis.uni-freiburg.de</a></li>'
-                             '<li>Joao Paulo Pereira <a href="mailto:"joao.pereira@felis.uni-freiburg.de">joao.pereira@felis.uni-freiburg.de</a></li>'
-                             '</ul>')
+        text = html.unescape(
+            'This App was programmed by:<br>'
+            '<ul>'
+            '<li>Anna Tenberg <a href="mailto:tenberg.a@posteo.de">'
+            'tenberg.a@posteo.de</a></li>'
+            '<li>Lukas Müller <a href="mailto:luggie@gmx.net">luggie@gmx.net'
+            '</a></li>'
+            '<li>Helge Schneider '
+            '<a href="mailto:info.helgeschneider@gmail.com">'
+            'info.helgeschneider@gmail.com</a></li>'
+            '</ul>'
+            'as part of Python II course at Albert-Ludwigs-Universität '
+            'Freiburg'
+            '<br>'
+            'held by:'
+            '<ul>'
+            '<li>Mirko Mälicke '
+            '<a href="mailto:mirko.maelicke@felis.uni-freiburg.de">'
+            'mirko.maelicke@felis.uni-freiburg.de</a></li>'
+            '<li>Joao Paulo Pereira '
+            '<a href="mailto:"joao.pereira@felis.uni-freiburg.de">'
+            'joao.pereira@felis.uni-freiburg.de</a></li>'
+            '</ul>')
 
 
         QtWidgets.QMessageBox.about(self, 'About', text)
@@ -189,7 +293,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         function within focal Statistic tab
         calls filter_main from focal_stats.py
         with set parameters.
-        :returns pop-up with original and filtered image
+        opens pop-up with original and filtered image
         '''
         #var def
         filter_type = self.fs_filter_type.currentText()
@@ -207,33 +311,47 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         elif filter_type.lower() == 'circle':
             radius = self.fs_radius.value()
         elif filter_type.lower() == 'wedge':
-            angle = (self.fs_radius.value(), self.fs_shape_1.value(), self.fs_shape_2.value())
+            angle = (self.fs_radius.value(),
+                     self.fs_shape_1.value(),
+                     self.fs_shape_2.value())
 
         #format
-        function_type=function_type.replace("Standard Deviation", "std").replace("Maximum", "max").replace("Minimum", "min").lower()
+        function_type=function_type.replace("Standard Deviation", "std")\
+            .replace("Maximum", "max").replace("Minimum", "min").lower()
         img_path = (str(self.fs_file_path))
 
-        #filter function call
-        filter_main(img_path = img_path, filtertype=filter_type.lower(), functiontype=function_type, squarelength=squarelength, shape=shape, radius=radius,
+        #calling filter function from focal_stats.py
+        filter_main(img_path = img_path,
+                    filtertype=filter_type.lower(),
+                    functiontype=function_type,
+                    squarelength=squarelength,
+                    shape=shape, radius=radius,
                     angles=angle)
 
     def file_browser(self):
         '''
         General Filebrowse function
-        :returns: chosen file's directory
+        returns chosen file's directory
         '''
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        self.fs_file_path, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                                  "All files(*)", options=options)
+        self.fs_file_path, _ = QFileDialog.getOpenFileName(self,
+                                            "QFileDialog.getOpenFileName()",
+                                            "",
+                                            "All files(*)",
+                                            options=options)
 
     def directory_browser(self):
         '''
-        :returns: chosen folder as path string
+        returns chosen folder as path string
         '''
-        self.ctm_dir = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.ctm_dir = str(QFileDialog.getExistingDirectory(self,
+                                                        "Select Directory"))
 
     def route_plot(self):
+        '''
+        calls routeplanner from routeplanner.py with chosen parameters
+        '''
         start_value = self.sb_start.value()
         finish_value = self.sb_finish.value()
         distance_value = self.cb_dis.currentText()
@@ -253,7 +371,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         plotter(a1,n1, a2, n2)
 
 
-
+'''
+opening the allpication
+'''
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()

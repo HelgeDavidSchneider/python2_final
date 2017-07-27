@@ -7,7 +7,7 @@ Check the reliability of all columns in the output frames.
 import pandas as pd
 import numpy as np
 import os
-
+import openpyxl
 
 def imk_folder(folderpath):
     """
@@ -38,7 +38,6 @@ def imk_folder(folderpath):
     if not os.path.exists(folderpath + '/output'):
         os.makedirs(folderpath + '/output')
 
-    # WRITE to excel
     writer = pd.ExcelWriter(folderpath + '/output/Manual_KnotData.xlsx')
     df_final.to_excel(writer, 'Multi_imgMan')
     df2_final.to_excel(writer, 'One_imgMan')
@@ -148,7 +147,11 @@ def imk_knot(dfg):
 
 
 # DEFINE data path
-folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT manager/Data_Part_1"
+'''
+folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT_manager/Data_Part_1"
 filepath = folderpath + '/Knots@Dgl_623_10_2015_05_28.kno'
 
+folderpath = 'E:/DropBox/Dropbox/STUDIGEDÖNS/fächer/python 2/projekte/final_git/python2_final/projects/CT_manager/Data_Part_1'
+
 df1, df2 = imk_folder(folderpath)
+'''

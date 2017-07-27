@@ -10,6 +10,8 @@ import subprocess as sp
 #imports for subproject files
 from projects.focal_stats import *
 from projects.plot import plotter
+from projects.CT_manager.ct_manager import *
+from projects.CT_manager.ct_manager_automatic import *
 
 #insert gui.ui file
 qtCreatorFile = "gui.ui"
@@ -36,6 +38,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #buttons in ct manager tab
         self.ctm_browse.clicked.connect(self.directory_browser)
+        self.ctm_run.clicked.connect(self.ctm_app)
         self.ctm_dir = None
 
         # menu buttons
@@ -53,6 +56,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_ctm.triggered.connect(self.ctm_tab)
         self.menu_route.triggered.connect(self.route_tab)
         self.menu_plotting.triggered.connect(self.plotting_tab)
+
+    def ctm_app(self):
+        if self.ctm_auto.isChecked():
+            ako_folder(self.ctm_dir)
+        if self.ctm_manu.isChecked():
+            imk_folder(self.ctm_dir)
 
     def plot_app(self):
         '''

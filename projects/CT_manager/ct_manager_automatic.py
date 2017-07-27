@@ -277,8 +277,8 @@ def ako_one_combine(df_out, filepath, tree_id, log_id):
 
     return df_out
 
-
+'''
 # Test
-folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT manager/Data_Part_2"
+folderpath = "C:/Users/helge/Dropbox/Uni/Python 2/python2_final/projects/CT_manager/Data_Part_2"
 df1, df2, knot_table = ako_folder(folderpath)
-
+'''

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -251,7 +251,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>321</width>
+        <width>501</width>
         <height>51</height>
        </rect>
       </property>
@@ -280,6 +280,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="ctm_run">
+         <property name="text">
+          <string>Run</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -556,5 +563,8 @@
    <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
+ <resources>
+  <include location="res_rc.qrc"/>
+ </resources>
  <connections/>
 </ui>

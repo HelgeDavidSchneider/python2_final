@@ -69,8 +69,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def ctm_app(self):
         if self.ctm_auto.isChecked():
             ako_folder(self.ctm_dir)
+            print(self.ctm_dir)
         if self.ctm_manu.isChecked():
             imk_folder(self.ctm_dir)
+            print(self.ctm_dir)
 
     def plot_app(self):
         '''

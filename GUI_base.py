@@ -276,8 +276,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             # 4=plotting
             text = html.unescape(
                 '<b>This is how to use Plotting</b>, an App<br>'
-                ' that plots two sin curves with two parameters<br>'
-                ' of the shown formula.'
+                ' that plots two Sinus curves with two parameters<br>'
+                ' each of the formula shown.'
                 '<ol>'
                 '<li>Choose Parameters</li>'
                 '<li>Press Plot</li>'

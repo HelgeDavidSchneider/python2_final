@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QFileDialog
 from html.parser import HTMLParser
 import webbrowser as wb
 import IPython
+import subprocess
 
 #imports for subproject files
 from projects.focal_stats import *
@@ -27,6 +28,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+        self.script_dir = os.path.dirname(os.path.realpath('__file__'))
 
         # connect input buttons from gui to functions
         # and set class attributes
@@ -34,10 +36,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # buttons in focal statistics tab
         self.fs_run.clicked.connect(self.fs_run_filter)
         self.fs_browse.clicked.connect(self.file_browser)
+        self.fs_pdf.clicked.connect(self.fs_infopdf)
         self.fs_file_path = None
 
         # buttons in route planner
         self.pb_route.clicked.connect(self.route_plot)
+        self.rp_info.clicked.connect(self.rp_infoipnb)
 
         # buttons in plotting tab
         self.plot_plot.clicked.connect(self.plot_app)
@@ -45,6 +49,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         # buttons in ct manager tab
         self.ctm_browse.clicked.connect(self.directory_browser)
         self.ctm_run.clicked.connect(self.ctm_app)
+        self.ctm_pdf.clicked.connect(self.ctm_infopdf)
         self.ctm_dir = None
 
         # tab close buttons
@@ -69,6 +74,41 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menu_ctm.triggered.connect(self.ctm_tab)
         self.menu_route.triggered.connect(self.route_tab)
         self.menu_plotting.triggered.connect(self.plotting_tab)
+
+    def rp_infoipnb(self):
+
+        """
+        rel_path = "documents/05_Scipy.ipynb"
+        abs_file_path = os.path.join(self.script_dir, rel_path)
+
+        import nbformat
+        from nbconvert import PythonExporter
+
+        with open(abs_file_path) as fh:
+            nb = nbformat.reads(fh.read(), nbformat.NO_CONVERT)
+
+        exporter = PythonExporter()
+        source, meta = exporter.from_notebook_node(nb)
+
+        with open(abs_file_path, 'w+') as fh:
+            fh.writelines(source.encode('utf-8'))
+        """
+
+    def ctm_infopdf(self):
+        """
+        opens CT_Manager.pdf in default pdf reader
+        """
+        rel_path = "documents/CT_Manager.pdf"
+        abs_file_path = os.path.join(self.script_dir, rel_path)
+        os.startfile(abs_file_path)
+
+    def fs_infopdf(self):
+        """
+        opens Image_Processing_1.pdf in default pdf reader
+        """
+        rel_path = "documents/Image_Processing_1.pdf"
+        abs_file_path = os.path.join(self.script_dir, rel_path)
+        os.startfile(abs_file_path)
 
     def ctm_app(self):
         """
@@ -96,6 +136,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             QtWidgets.QTabWidget.currentIndex(self.tabWidget))
         else:
             pass
+
     """
     tab switch functions
     0=info
@@ -124,7 +165,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         opens a new ipython console
         """
-        IPython.start_ipython()
+        try:
+            IPython.start_ipython()
+        except:
+            pass
+        try:
+            subprocess.call("ipython notebook", shell=True)
+        except:
+            pass
 
     def browser_app(self):
         """

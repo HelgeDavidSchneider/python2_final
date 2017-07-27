@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="tabsClosable">
      <bool>false</bool>
@@ -260,6 +260,19 @@
        <bool>false</bool>
       </property>
      </widget>
+     <widget class="QPushButton" name="fs_pdf">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>440</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Show info.pdf</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab2">
      <attribute name="title">
@@ -323,6 +336,19 @@
       </property>
       <property name="default">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ctm_pdf">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>440</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Show info.pdf</string>
       </property>
      </widget>
     </widget>
@@ -425,6 +451,19 @@
       </property>
       <property name="default">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="rp_info">
+      <property name="geometry">
+       <rect>
+        <x>424</x>
+        <y>440</y>
+        <width>151</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>show Info ipython notebook</string>
       </property>
      </widget>
     </widget>
